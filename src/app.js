@@ -5,7 +5,7 @@ const PORT = 3000; // process.env.port
 const app = express();
 
 app.use((req, res, next) => {
-    console.log(`${req.url}@${(new Date()).toISOString()}`);
+    console.log(`'${req.method}' request was called on '${req.url}' url at '${(new Date()).toISOString()}'`);
     next();
 });
 
@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.error('ERROR: ', err);
-    res.status(500).send(err.message);
+    res.status(500).send({'error': err.message});
 });
 
 app.listen(PORT,  error => {

@@ -1,5 +1,5 @@
-import DatabaseConnector from './inMemoryStorage';
+import UserDatabaseWrapper from './inMemoryUserStorage';
 
 export default function init() {
-    return new DatabaseConnector();
+    return new UserDatabaseWrapper();
 }
