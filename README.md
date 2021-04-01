@@ -1,5 +1,11 @@
 # nodejs-mentoring-api
 
+## npm scripts:
+
+* **npm run dev** to run app locally
+
+* **npm run eslint** to run eslint audit
+
 ## CURL API calls examples:
 
 * **GET** get all users - curl http://localhost:3000/users | npx json

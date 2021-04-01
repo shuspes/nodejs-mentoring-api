@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
     res.send('Hi from root');
 });
 
-app.use((err, req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
     console.error('ERROR: ', err);
     res.status(500).send({ 'error': err.message });
 });
