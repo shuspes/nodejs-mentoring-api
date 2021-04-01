@@ -16,13 +16,13 @@ app.get('/', (req, res) => {
     res.send('Hi from root');
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     console.error('ERROR: ', err);
-    res.status(500).send({'error': err.message});
+    res.status(500).send({ 'error': err.message });
 });
 
 app.listen(PORT,  error => {
-    if(error) {
+    if (error) {
         return console.error('ERROR: ', error);
     }
     console.log(`Application is listening port ${PORT}.`);

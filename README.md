@@ -4,7 +4,7 @@
 
 * **GET** get all users - curl http://localhost:3000/users | npx json
 
-* **GET** get user by id - curl http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **GET** get user by id - curl http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
 
 * **POST** create user - curl -X POST -H "Content-Type: application/json" -d "{\"login\": \"user-5-new\", \"password\": \"p@ssw0rd\", \"age\": 56, \"isDeleted\": false}" http://localhost:3000/users | npx json
 
@@ -12,7 +12,7 @@
 
 * **GET** get auto suggest users - curl http://localhost:3000/users/use/10 | npx json
 
-* **DELETE** remive user - curl -X DELETE http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **DELETE** remive user - curl -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
 
 ## NOTES:
 

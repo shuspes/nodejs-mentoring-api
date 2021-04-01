@@ -10,14 +10,14 @@ export default class UserDatabaseWrapper {
 
     #sortByProperty(userProperty) {
         return (a, b) => {
-            if(a[userProperty] < b[userProperty]) {
+            if (a[userProperty] < b[userProperty]) {
                 return -1;
             }
-            if(a[userProperty] > b[userProperty]) {
+            if (a[userProperty] > b[userProperty]) {
                 return 1;
             }
             return 0;
-        }
+        };
     }
 
     getUsers() {
@@ -30,7 +30,7 @@ export default class UserDatabaseWrapper {
 
     createUser(user) {
         const createdUser = {
-            ...user, 
+            ...user,
             id: this.#generateUserId()
         };
 
@@ -40,7 +40,7 @@ export default class UserDatabaseWrapper {
 
     updateUser(user) {
         const existedUserIndex = this.#users.findIndex(element => element.id === user.id);
-        if(existedUserIndex < 0) {
+        if (existedUserIndex < 0) {
             throw new Error(`User with '${user.id}' id does not exist.`);
         }
 
@@ -57,11 +57,11 @@ export default class UserDatabaseWrapper {
 
     removeUser(id) {
         const existedUserIndex = this.#users.findIndex(element => element.id === id);
-        if(existedUserIndex < 0) {
+        if (existedUserIndex < 0) {
             throw new Error(`User with '${id}' id does not exist.`);
         }
 
         this.#users[existedUserIndex].isDeleted = true;
         return this.#users[existedUserIndex];
     }
-};
+}

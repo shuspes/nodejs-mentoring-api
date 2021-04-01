@@ -6,7 +6,7 @@ export default class UsersController {
     }
 
     getAllUsers = (req, res) => {
-        const users = this.databaseWrapper.getUsers();        
+        const users = this.databaseWrapper.getUsers();
         res.send({ users });
     }
 
@@ -25,7 +25,7 @@ export default class UsersController {
     updateUser = (req, res) => {
         const newUserFields = req.body;
         const existedUser = req.existedUser;
-        const newUser = {...existedUser, ...newUserFields, id: existedUser.id};
+        const newUser = { ...existedUser, ...newUserFields, id: existedUser.id };
         const user = this.databaseWrapper.updateUser(newUser);
         res.send({ user });
     }
@@ -35,7 +35,7 @@ export default class UsersController {
             loginSubstring = '',
             limit = 0
         } = req.params;
-        
+
         const users = this.databaseWrapper.getAutoSuggestUsers(loginSubstring, limit);
         res.send({ users });
     }
@@ -48,7 +48,7 @@ export default class UsersController {
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
         const existedUser = this.databaseWrapper.getUser(userId);
-        if(!existedUser) {
+        if (!existedUser) {
             throw new Error(`User with '${userId}' id does not exist.`);
         }
 
