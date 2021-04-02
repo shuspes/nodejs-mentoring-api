@@ -20,6 +20,12 @@ router.get('/:loginSubstring/:limit', usersController.getAutoSuggestUsers);
 
 router.delete('/:userId', usersController.removeUser);
 
-// middleware to handle errors to send 400 response
+router.use(usersController.handleUserBodyValidationMiddleware);
+
+// eslint-disable-next-line no-unused-vars
+router.use((err, req, res, next) => {
+    console.error('ERROR: ', err);
+    res.status(400).send({ 'error': err.message });
+});
 
 export default router;

@@ -3,7 +3,7 @@ import { createValidator } from 'express-joi-validation';
 import databaseWrapper from '../databaseWrapper';
 
 export default class UsersController {
-    #validator = createValidator({});
+    #validator = createValidator({ passError: true });
 
     #userBodySchema = Joi.object({
         'login': Joi.string().regex(/^[a-zA-Z0-9-]*$/).required(), // only letters, numbers and -
@@ -69,5 +69,12 @@ export default class UsersController {
 
     getUserBodyValidator = () => {
         return this.#validator.body(this.#userBodySchema);
+    }
+
+    handleUserBodyValidationMiddleware = (err, req, res, next) => {
+        const errorMessage = err && err.error && err.error.isJoi
+            ? { message: err.error.toString() }
+            : err;
+        next(errorMessage);
     }
 }

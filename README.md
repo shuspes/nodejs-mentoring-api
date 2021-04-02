@@ -8,17 +8,17 @@
 
 ## CURL API calls examples:
 
-* **GET** get all users - curl http://localhost:3000/users | npx json
+* **GET** get all users - curl -i http://localhost:3000/users | npx json
 
-* **GET** get user by id - curl http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **GET** get user by id - curl -i http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
 
-* **POST** create user - curl -X POST -H "Content-Type: application/json" -d "{\"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 56, \"isDeleted\": false}" http://localhost:3000/users | npx json
+* **POST** create user - curl -i -X POST -H "Content-Type: application/json" -d "{\"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 56, \"isDeleted\": false}" http://localhost:3000/users | npx json
 
-* **PUT** update user - curl -X PUT -H "Content-Type: application/json" -d "{\"login\": \"user-2-updated\", \"password\": \"U$er@1\", \"age\": 56, \"isDeleted\": false}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
+* **PUT** update user - curl -i -X PUT -H "Content-Type: application/json" -d "{\"login\": \"user-2-updated\", \"password\": \"U$er@1\", \"age\": 56, \"isDeleted\": false}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
 
-* **GET** get auto suggest users - curl http://localhost:3000/users/use/10 | npx json
+* **GET** get auto suggest users - curl -i http://localhost:3000/users/use/10 | npx json
 
-* **DELETE** remive user - curl -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **DELETE** remive user - curl -i -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
 
 ## NOTES:
 
@@ -26,6 +26,6 @@
 
 ## Testing of unexpected usage:
 
-* **POST** create user with extra argument and string isDeleted - curl -X POST -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 67, \"isDeleted\": \"string\"}" http://localhost:3000/users | npx json
+* **POST** create user with extra argument and string isDeleted - curl -i -X POST -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 67, \"isDeleted\": \"string\"}" http://localhost:3000/users | npx json
 
-* **PUT** update user with extra argument and without age, not valid password - curl -X PUT -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-2-updated\", \"password\": \"u$eR@\", \"isDeleted\": false}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
+* **PUT** update user with extra argument and without age, not valid password - curl -i -X PUT -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-2-updated\", \"password\": \"u$eR@\", \"isDeleted\": false}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
