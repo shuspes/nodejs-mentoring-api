@@ -12,9 +12,9 @@ router.get('/', usersController.getAllUsers);
 
 router.get('/:userId', usersController.getUser);
 
-router.post('/', usersController.createUser);
+router.post('/', usersController.getUserBodyValidator(), usersController.createUser);
 
-router.put('/:userId', usersController.updateUser);
+router.put('/:userId', usersController.getUserBodyValidator(), usersController.updateUser);
 
 router.get('/:loginSubstring/:limit', usersController.getAutoSuggestUsers);
 

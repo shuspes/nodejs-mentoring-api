@@ -1,6 +1,17 @@
+import Joi from 'joi';
+import { createValidator } from 'express-joi-validation';
 import databaseWrapper from '../databaseWrapper';
 
 export default class UsersController {
+    #validator = createValidator({});
+
+    #userBodySchema = Joi.object({
+        'login': Joi.string().regex(/^[a-zA-Z0-9-]*$/).required(), // only letters, numbers and -
+        'password': Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/).required(), // password must contain at least one letter, one big letter and number
+        'age': Joi.number().min(4).max(130).required(), // user’s age must be between 4 and 130.
+        'isDeleted': Joi.boolean().required()
+    });
+
     constructor() {
         this.databaseWrapper = databaseWrapper();
     }
@@ -54,5 +65,9 @@ export default class UsersController {
 
         req.existedUser = existedUser;
         next();
+    }
+
+    getUserBodyValidator = () => {
+        return this.#validator.body(this.#userBodySchema);
     }
 }
