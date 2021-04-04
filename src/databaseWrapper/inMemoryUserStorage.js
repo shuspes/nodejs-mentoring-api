@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import initialUsersList from './initialUsersList';
+import CustomError from '../errors/customError';
 
 export default class UserDatabaseWrapper {
     #users = initialUsersList;
@@ -31,7 +32,8 @@ export default class UserDatabaseWrapper {
     createUser(user) {
         const createdUser = {
             ...user,
-            id: this.#generateUserId()
+            id: this.#generateUserId(),
+            isDeleted: false
         };
 
         this.#users.push(createdUser);
@@ -41,7 +43,7 @@ export default class UserDatabaseWrapper {
     updateUser(user) {
         const existedUserIndex = this.#users.findIndex(element => element.id === user.id);
         if (existedUserIndex < 0) {
-            throw new Error(`User with '${user.id}' id does not exist.`);
+            throw new CustomError(400, `User with '${user.id}' id does not exist.`);
         }
 
         this.#users[existedUserIndex] = user;
@@ -58,7 +60,7 @@ export default class UserDatabaseWrapper {
     removeUser(id) {
         const existedUserIndex = this.#users.findIndex(element => element.id === id);
         if (existedUserIndex < 0) {
-            throw new Error(`User with '${id}' id does not exist.`);
+            throw new CustomError(400, `User with '${id}' id does not exist.`);
         }
 
         this.#users[existedUserIndex].isDeleted = true;

@@ -1,5 +1,6 @@
 import express from 'express';
 import UsersController from '../controllers/users.controller';
+import CustomError from '../errors/customError';
 
 const router = express.Router();
 const usersController = new UsersController();
@@ -8,24 +9,27 @@ router.use(express.json());
 
 router.param('userId', usersController.handleUserIdParamMiddleware);
 
-router.get('/', usersController.getAllUsers);
+router.route('/')
+    .get(usersController.getAllUsers)
+    .post(usersController.getUserBodyValidator(), usersController.createUser);
 
-router.get('/:userId', usersController.getUser);
-
-router.post('/', usersController.getUserBodyValidator(), usersController.createUser);
-
-router.put('/:userId', usersController.getUserBodyValidator(), usersController.updateUser);
+router.route('/:userId')
+    .get(usersController.getUser)
+    .put(usersController.getUserBodyValidator(), usersController.updateUser)
+    .delete(usersController.removeUser);
 
 router.get('/:loginSubstring/:limit', usersController.getAutoSuggestUsers);
 
-router.delete('/:userId', usersController.removeUser);
-
 router.use(usersController.handleUserBodyValidationMiddleware);
 
-// eslint-disable-next-line no-unused-vars
 router.use((err, req, res, next) => {
-    console.error('ERROR: ', err);
-    res.status(400).send({ 'error': err.message });
+    console.error('users router layer ERROR: ', err);
+
+    if (CustomError.isCustomError(err)) {
+        res.status(err.code).send({ 'error': err.message });
+    } else {
+        return next(err);
+    }
 });
 
 export default router;

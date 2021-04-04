@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx babel src --out-dir dist",
-    "dev": "nodemon --exec npm run restart",
-    "restart": "rm -rf dist && npm run build && npm run start",
+    "compile": "npx babel src --out-dir dist",
+    "build": "rm -rf dist && npm run compile",
     "start": "node dist/app.js",
+    "dev": "nodemon --exec babel-node src/app.js",
     "eslint": "npx eslint src"
   },
   "repository": {

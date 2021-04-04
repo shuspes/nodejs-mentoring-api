@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
 import databaseWrapper from '../databaseWrapper';
+import CustomError from '../errors/customError';
 
 export default class UsersController {
     #validator = createValidator({ passError: true });
@@ -8,8 +9,7 @@ export default class UsersController {
     #userBodySchema = Joi.object({
         'login': Joi.string().regex(/^[a-zA-Z0-9-]*$/).required(), // only letters, numbers and -
         'password': Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/).required(), // password must contain at least one letter, one big letter and number
-        'age': Joi.number().min(4).max(130).required(), // user’s age must be between 4 and 130.
-        'isDeleted': Joi.boolean().required()
+        'age': Joi.number().min(4).max(130).required() // user’s age must be between 4 and 130.
     });
 
     constructor() {
@@ -30,13 +30,17 @@ export default class UsersController {
     createUser = (req, res) => {
         const userFields = req.body;
         const user = this.databaseWrapper.createUser(userFields);
-        res.send({ user });
+        res.status(201).send({ user });
     }
 
     updateUser = (req, res) => {
         const newUserFields = req.body;
         const existedUser = req.existedUser;
-        const newUser = { ...existedUser, ...newUserFields, id: existedUser.id };
+        const newUser = {
+            ...existedUser,
+            ...newUserFields,
+            id: existedUser.id
+        };
         const user = this.databaseWrapper.updateUser(newUser);
         res.send({ user });
     }
@@ -60,7 +64,7 @@ export default class UsersController {
     handleUserIdParamMiddleware = (req, res, next, userId) => {
         const existedUser = this.databaseWrapper.getUser(userId);
         if (!existedUser) {
-            throw new Error(`User with '${userId}' id does not exist.`);
+            throw new CustomError(400, `User with '${userId}' id does not exist.`);
         }
 
         req.existedUser = existedUser;
@@ -72,9 +76,10 @@ export default class UsersController {
     }
 
     handleUserBodyValidationMiddleware = (err, req, res, next) => {
-        const errorMessage = err && err.error && err.error.isJoi
-            ? { message: err.error.toString() }
+        const error = err && err.error && err.error.isJoi
+            ? new CustomError(400, err.error.toString())
             : err;
-        next(errorMessage);
+
+        next(error);
     }
 }
