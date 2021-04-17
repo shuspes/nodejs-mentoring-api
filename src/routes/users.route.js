@@ -5,8 +5,6 @@ import CustomError from '../errors/customError';
 const router = express.Router();
 const usersController = new UsersController();
 
-router.use(express.json());
-
 router.param('userId', usersController.handleUserIdParamMiddleware);
 
 router.route('/')

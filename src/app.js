@@ -4,6 +4,8 @@ import users from './routes/users.route';
 const PORT = 3000; // process.env.port
 const app = express();
 
+app.use(express.json());
+
 app.use((req, res, next) => {
     console.log(`'${req.method}' request was called on '${req.url}' url at '${(new Date()).toISOString()}'`);
     next();
