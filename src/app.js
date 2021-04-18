@@ -1,7 +1,8 @@
 import express from 'express';
 import users from './routes/users.route';
+import config from './config';
 
-const PORT = 3000; // process.env.port
+const PORT = config.port;
 const app = express();
 
 app.use(express.json());

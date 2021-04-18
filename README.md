@@ -13,6 +13,15 @@
 * **database/deleteUsersTableContent.sql** to clean **users** table
 * **database/dropUsersTable.sql** to delete **users** table
 
+## .env file template:
+PORT=  
+DATABASE_DIALECT=  
+DATABASE_HOST=  
+DATABASE_PORT=  
+DATABASE_DB_NAME=  
+DATABASE_USER=  
+DATABASE_PASSWORD=  
+
 ## CURL API calls examples:
 
 * **GET** get all users - curl -i http://localhost:3000/users | npx json
