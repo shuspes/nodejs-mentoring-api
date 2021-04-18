@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS users (
 	login character (50) UNIQUE NOT NULL,
 	password character (50) NOT NULL,
 	age smallint NOT NULL,
-	isDeleted boolean DEFAULT FALSE
+	"isDeleted" boolean DEFAULT FALSE
 );
