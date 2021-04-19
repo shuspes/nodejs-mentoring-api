@@ -16,24 +16,33 @@ export default class UsersController {
         this.userRepository = createUserRepository();
     }
 
-    getAllUsers = (req, res) => {
-        const users = this.userRepository.getUsers();
-        res.send({ users });
+    getAllUsers = (req, res, next) => {
+        this.userRepository.getUsers()
+            .then(users => {
+                res.send({ users });
+            })
+            .catch(next);
     }
 
-    getUser = (req, res) => {
+    getUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        const user = this.userRepository.getUser(userId);
-        res.send({ user });
+        this.userRepository.getUser(userId)
+            .then(user => {
+                res.send({ user });
+            })
+            .catch(next);
     }
 
-    createUser = (req, res) => {
+    createUser = (req, res, next) => {
         const userFields = req.body;
-        const user = this.userRepository.createUser(userFields);
-        res.status(201).send({ user });
+        this.userRepository.createUser(userFields)
+            .then(user => {
+                res.status(201).send({ user });
+            })
+            .catch(next);
     }
 
-    updateUser = (req, res) => {
+    updateUser = (req, res, next) => {
         const newUserFields = req.body;
         const existedUser = req.existedUser;
         const newUser = {
@@ -41,34 +50,46 @@ export default class UsersController {
             ...newUserFields,
             id: existedUser.id
         };
-        const user = this.userRepository.updateUser(newUser);
-        res.send({ user });
+        this.userRepository.updateUser(newUser)
+            .then(user => {
+                res.send({ user });
+            })
+            .catch(next);
     }
 
-    getAutoSuggestUsers = (req, res) => {
+    getAutoSuggestUsers = (req, res, next) => {
         const {
             loginSubstring = '',
             limit = 0
         } = req.params;
 
-        const users = this.userRepository.getAutoSuggestUsers(loginSubstring, limit);
-        res.send({ users });
+        this.userRepository.getAutoSuggestUsers(loginSubstring, limit)
+            .then(users => {
+                res.send({ users });
+            })
+            .catch(next);
     }
 
-    removeUser = (req, res) => {
+    removeUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        const user = this.userRepository.removeUser(userId);
-        res.send({ user });
+        this.userRepository.removeUser(userId)
+            .then(user => {
+                res.send({ user });
+            })
+            .catch(next);
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
-        const existedUser = this.userRepository.getUser(userId);
-        if (!existedUser) {
-            throw new CustomError(400, `User with '${userId}' id does not exist.`);
-        }
+        this.userRepository.getUser(userId)
+            .then(existedUser => {
+                if (!existedUser) {
+                    return Promise.reject(new CustomError(400, `User with '${userId}' id does not exist.`));
+                }
 
-        req.existedUser = existedUser;
-        next();
+                req.existedUser = existedUser;
+                next();
+            })
+            .catch(next);
     }
 
     getUserBodyValidator = () => {

@@ -22,11 +22,11 @@ export default class LocalUserRepository {
     }
 
     getUsers() {
-        return this.#users;
+        return Promise.resolve(this.#users);
     }
 
     getUser(id) {
-        return this.#users.find(user => user.id === id);
+        return Promise.resolve(this.#users.find(user => user.id === id));
     }
 
     createUser(user) {
@@ -37,33 +37,33 @@ export default class LocalUserRepository {
         };
 
         this.#users.push(createdUser);
-        return createdUser;
+        return Promise.resolve(createdUser);
     }
 
     updateUser(user) {
         const existedUserIndex = this.#users.findIndex(element => element.id === user.id);
         if (existedUserIndex < 0) {
-            throw new CustomError(400, `User with '${user.id}' id does not exist.`);
+            return Promise.reject(new CustomError(400, `User with '${user.id}' id does not exist.`));
         }
 
         this.#users[existedUserIndex] = user;
-        return user;
+        return Promise.resolve(user);
     }
 
     getAutoSuggestUsers(loginSubstring, limit) {
-        return this.#users.filter(element => !element.isDeleted)
+        return Promise.resolve(this.#users.filter(element => !element.isDeleted)
             .slice(0, limit)
             .filter(element => element.login.includes(loginSubstring))
-            .sort(this.#sortByProperty('login'));
+            .sort(this.#sortByProperty('login')));
     }
 
     removeUser(id) {
         const existedUserIndex = this.#users.findIndex(element => element.id === id);
         if (existedUserIndex < 0) {
-            throw new CustomError(400, `User with '${id}' id does not exist.`);
+            return Promise.reject(new CustomError(400, `User with '${id}' id does not exist.`));
         }
 
         this.#users[existedUserIndex].isDeleted = true;
-        return this.#users[existedUserIndex];
+        return Promise.resolve(this.#users[existedUserIndex]);
     }
 }
