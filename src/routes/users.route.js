@@ -1,24 +1,24 @@
 import express from 'express';
-import UsersController from '../controllers/users.controller';
+import UserController from '../controllers/user.controller';
 import CustomError from '../errors/customError';
 
 const router = express.Router();
-const usersController = new UsersController();
+const userController = new UserController();
 
-router.param('userId', usersController.handleUserIdParamMiddleware);
+router.param('userId', userController.handleUserIdParamMiddleware);
 
 router.route('/')
-    .get(usersController.getAllUsers)
-    .post(usersController.getUserBodyValidator(), usersController.createUser);
+    .get(userController.getAllUsers)
+    .post(userController.getUserBodyValidator(), userController.createUser);
 
 router.route('/:userId')
-    .get(usersController.getUser)
-    .put(usersController.getUserBodyValidator(), usersController.updateUser)
-    .delete(usersController.removeUser);
+    .get(userController.getUser)
+    .put(userController.getUserBodyValidator(), userController.updateUser)
+    .delete(userController.removeUser);
 
-router.get('/:loginSubstring/:limit', usersController.getAutoSuggestUsers);
+router.get('/:loginSubstring/:limit', userController.getAutoSuggestUsers);
 
-router.use(usersController.handleUserBodyValidationMiddleware);
+router.use(userController.handleUserBodyValidationMiddleware);
 
 router.use((err, req, res, next) => {
     console.error('users router layer ERROR: ', err);

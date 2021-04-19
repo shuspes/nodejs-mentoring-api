@@ -3,7 +3,7 @@ import { createValidator } from 'express-joi-validation';
 import { createUserRepository } from '../repositories';
 import CustomError from '../errors/customError';
 
-export default class UsersController {
+export default class UserController {
     #validator = createValidator({ passError: true });
 
     #userBodySchema = Joi.object({
