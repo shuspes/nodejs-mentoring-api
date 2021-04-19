@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
-import initialUsersList from './initialUsersList';
+import initialUsersList from '../database/initialUsersList';
 import CustomError from '../errors/customError';
 
-export default class UserDatabaseWrapper {
+export default class LocalUserRepository {
     #users = initialUsersList;
 
     #generateUserId() {

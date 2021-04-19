@@ -1,35 +1,35 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
-import databaseWrapper from '../databaseWrapper';
+import { createUserRepository } from '../repositories';
 import CustomError from '../errors/customError';
 
 export default class UsersController {
     #validator = createValidator({ passError: true });
 
     #userBodySchema = Joi.object({
-        'login': Joi.string().regex(/^[a-zA-Z0-9-]*$/).required(), // only letters, numbers and -
-        'password': Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/).required(), // password must contain at least one letter, one big letter and number
+        'login': Joi.string().regex(/^[a-zA-Z0-9-]*$/).max(50).required(), // only letters, numbers and -
+        'password': Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/).max(50).required(), // password must contain at least one letter, one big letter and number
         'age': Joi.number().min(4).max(130).required() // user’s age must be between 4 and 130.
     });
 
     constructor() {
-        this.databaseWrapper = databaseWrapper();
+        this.userRepository = createUserRepository();
     }
 
     getAllUsers = (req, res) => {
-        const users = this.databaseWrapper.getUsers();
+        const users = this.userRepository.getUsers();
         res.send({ users });
     }
 
     getUser = (req, res) => {
         const userId = req.params.userId || '';
-        const user = this.databaseWrapper.getUser(userId);
+        const user = this.userRepository.getUser(userId);
         res.send({ user });
     }
 
     createUser = (req, res) => {
         const userFields = req.body;
-        const user = this.databaseWrapper.createUser(userFields);
+        const user = this.userRepository.createUser(userFields);
         res.status(201).send({ user });
     }
 
@@ -41,7 +41,7 @@ export default class UsersController {
             ...newUserFields,
             id: existedUser.id
         };
-        const user = this.databaseWrapper.updateUser(newUser);
+        const user = this.userRepository.updateUser(newUser);
         res.send({ user });
     }
 
@@ -51,18 +51,18 @@ export default class UsersController {
             limit = 0
         } = req.params;
 
-        const users = this.databaseWrapper.getAutoSuggestUsers(loginSubstring, limit);
+        const users = this.userRepository.getAutoSuggestUsers(loginSubstring, limit);
         res.send({ users });
     }
 
     removeUser = (req, res) => {
         const userId = req.params.userId || '';
-        const user = this.databaseWrapper.removeUser(userId);
+        const user = this.userRepository.removeUser(userId);
         res.send({ user });
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
-        const existedUser = this.databaseWrapper.getUser(userId);
+        const existedUser = this.userRepository.getUser(userId);
         if (!existedUser) {
             throw new CustomError(400, `User with '${userId}' id does not exist.`);
         }
