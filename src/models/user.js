@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import config from '../config/index';
 import sequelize from '../database/dbConnection';
 
 class User extends Sequelize.Model {}
@@ -24,6 +25,6 @@ User.init({
     isDeleted: {
         type: Sequelize.BOOLEAN
     }
-}, { sequelize, modelName: 'User', tableName: 'users', timestamps: false });
+}, { sequelize, modelName: 'User', tableName: config.database.usersTableName, timestamps: false });
 
 export default User;
