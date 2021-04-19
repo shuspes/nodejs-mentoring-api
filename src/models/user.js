@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import { v4 as uuidv4 } from 'uuid';
 import config from '../config/index';
 import sequelize from '../database/dbConnection';
 
@@ -10,12 +11,12 @@ User.init({
         primaryKey: true
     },
     login: {
-        type: Sequelize.CHAR(50),
+        type: Sequelize.STRING(50),
         unique: true,
         allowNull: false
     },
     password: {
-        type: Sequelize.CHAR(50),
+        type: Sequelize.STRING(50),
         allowNull: false
     },
     age: {
@@ -23,8 +24,13 @@ User.init({
         allowNull: false
     },
     isDeleted: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
     }
 }, { sequelize, modelName: 'User', tableName: config.database.usersTableName, timestamps: false });
+
+User.beforeCreate((user) => {
+    return user.id = uuidv4();
+});
 
 export default User;
