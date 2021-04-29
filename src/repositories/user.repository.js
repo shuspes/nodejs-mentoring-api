@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import CustomError from '../errors/customError';
 import UserModel from '../models/user';
 
-export default class LocalUserRepository {
+export default class PgUserRepository {
     async getUsers() {
         try {
             const users = await UserModel.findAll({ raw : true });
