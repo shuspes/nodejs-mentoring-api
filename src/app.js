@@ -1,8 +1,11 @@
 import express from 'express';
 import users from './routes/users.route';
+import config from './config';
 
-const PORT = 3000; // process.env.port
+const PORT = config.port;
 const app = express();
+
+app.use(express.json());
 
 app.use((req, res, next) => {
     console.log(`'${req.method}' request was called on '${req.url}' url at '${(new Date()).toISOString()}'`);
@@ -21,7 +24,7 @@ app.use((err, req, res, next) => {
     if (res.headersSent) {
         return next(err);
     }
-    res.status(500).send({ 'error': err.message });
+    res.status(500).send({ 'error': err.message || err });
 });
 
 app.listen(PORT,  error => {

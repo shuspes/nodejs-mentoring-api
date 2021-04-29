@@ -6,6 +6,23 @@
 
 * **npm run eslint** to run eslint audit
 
+## Database:
+
+* **database/createUsersTable.sql** to create **users** table
+* **database/addInitialDataToUsersTable.sql** to add initial contend to **users** table
+* **database/deleteUsersTableContent.sql** to clean **users** table
+* **database/dropUsersTable.sql** to delete **users** table
+
+## .env file template:
+PORT=  
+DATABASE_DIALECT=  
+DATABASE_HOST=  
+DATABASE_PORT=  
+DATABASE_DB_NAME=  
+DATABASE_USER=  
+DATABASE_PASSWORD=  
+DATABASE_USERS_TABLE_NAME=  
+
 ## CURL API calls examples:
 
 * **GET** get all users - curl -i http://localhost:3000/users | npx json
