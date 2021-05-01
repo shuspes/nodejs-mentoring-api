@@ -1,9 +1,14 @@
 import express from 'express';
+import { createUserRepository } from '../repositories';
+import UserService from '../services/user.service';
 import UserController from '../controllers/user.controller';
 import CustomError from '../errors/customError';
 
 const router = express.Router();
-const userController = new UserController();
+
+const userRepository = createUserRepository();
+const userService = new UserService(userRepository);
+const userController = new UserController(userService);
 
 router.param('userId', userController.handleUserIdParamMiddleware);
 

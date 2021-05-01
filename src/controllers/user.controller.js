@@ -1,6 +1,5 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
-import { createUserRepository } from '../repositories';
 import CustomError from '../errors/customError';
 
 export default class UserController {
@@ -12,12 +11,12 @@ export default class UserController {
         'age': Joi.number().min(4).max(130).required() // user’s age must be between 4 and 130.
     });
 
-    constructor() {
-        this.userRepository = createUserRepository();
+    constructor(service) {
+        this.service = service;
     }
 
     getAllUsers = (req, res, next) => {
-        this.userRepository.getUsers()
+        this.service.getAllUsers()
             .then(users => {
                 res.send({ users });
             })
@@ -26,7 +25,7 @@ export default class UserController {
 
     getUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        this.userRepository.getUser(userId)
+        this.service.getUser(userId)
             .then(user => {
                 res.send({ user });
             })
@@ -35,7 +34,7 @@ export default class UserController {
 
     createUser = (req, res, next) => {
         const userFields = req.body;
-        this.userRepository.createUser(userFields)
+        this.service.createUser(userFields)
             .then(user => {
                 res.status(201).send({ user });
             })
@@ -45,12 +44,8 @@ export default class UserController {
     updateUser = (req, res, next) => {
         const newUserFields = req.body;
         const existedUser = req.existedUser;
-        const newUser = {
-            ...existedUser,
-            ...newUserFields,
-            id: existedUser.id
-        };
-        this.userRepository.updateUser(newUser)
+
+        this.service.updateUser(newUserFields, existedUser)
             .then(user => {
                 res.send({ user });
             })
@@ -63,7 +58,7 @@ export default class UserController {
             limit = 0
         } = req.params;
 
-        this.userRepository.getAutoSuggestUsers(loginSubstring, limit)
+        this.service.getAutoSuggestUsers(loginSubstring, limit)
             .then(users => {
                 res.send({ users });
             })
@@ -72,7 +67,7 @@ export default class UserController {
 
     removeUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        this.userRepository.removeUser(userId)
+        this.service.removeUser(userId)
             .then(user => {
                 res.send({ user });
             })
@@ -80,7 +75,7 @@ export default class UserController {
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
-        this.userRepository.getUser(userId)
+        this.service.getUser(userId)
             .then(existedUser => {
                 if (!existedUser) {
                     return Promise.reject(new CustomError(400, `User with '${userId}' id does not exist.`));
