@@ -44,8 +44,8 @@ export default class GroupController {
     removeGroup = (req, res, next) => {
         const groupId = req.params.groupId || '';
         this.service.removeGroup(groupId)
-            .then(group => {
-                res.send({ group });
+            .then(id => {
+                res.send({ deletedGroup: id });
             })
             .catch(next);
     }

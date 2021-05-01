@@ -60,8 +60,8 @@ DATABASE_GROUPS_TABLE_NAME=
 
 * **GET** get group by id - curl -i http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130002 | npx json
 
-* **POST** create group - curl -i -X POST -H "Content-Type: application/json" -d "{\"name\": \"group-5-new\", \"permissions\": \"permissions\"}" http://localhost:3000/groups | npx json
+* **POST** create group - curl -i -X POST -H "Content-Type: application/json" -d "{\"name\": \"group-5-new\", \"permissions\": [\"READ\", \"SHARE\", \"UPLOAD_FILES\"]}" http://localhost:3000/groups | npx json
 
-* **PUT** update group - curl -i -X PUT -H "Content-Type: application/json" -d "{\"permissions\": \"permissions\"}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130001 | npx json
+* **PUT** update group - curl -i -X PUT -H "Content-Type: application/json" -d "{\"permissions\": [\"UPLOAD_FILES\"]}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130001 | npx json
 
 * **DELETE** remove group - curl -i -X DELETE http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130004 | npx json

@@ -1,7 +1,7 @@
 import express from 'express';
 import GroupController from '../controllers/group.controller';
 import GroupService from '../services/group.service';
-import GroupRepository from '../repositories/user.repository';
+import GroupRepository from '../repositories/group.repository';
 
 const router = express.Router();
 

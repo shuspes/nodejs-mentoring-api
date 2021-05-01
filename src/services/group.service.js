@@ -1,35 +1,29 @@
-const defaultGroup = {
-    id: 'd29e2030-a9e3-11eb-bcbc-0242ac130001',
-    name: 'group-1',
-    permissions: ['READ', 'DELETE']
-};
-
 export default class GroupService {
     constructor(repository) {
         this.repository = repository;
     }
 
-    getGroup(groupId) {
-        return Promise.resolve(defaultGroup);
+    async getGroup(groupId) {
+        return await this.repository.getGroup(groupId);
     }
 
-    getAllGroups() {
-        return Promise.resolve([defaultGroup]);
+    async getAllGroups() {
+        return await this.repository.getGroups();
     }
 
-    createGroup(groupFields) {
-        return Promise.resolve(groupFields);
+    async createGroup(groupFields) {
+        return await this.repository.createGroup(groupFields);
     }
 
-    updateGroup(groupId, newGroupFields) {
+    async updateGroup(groupId, newGroupFields) {
         const newGroup = {
             ...newGroupFields,
             id: groupId
         };
-        return Promise.resolve(newGroup);
+        return await this.repository.updateGroup(newGroup);
     }
 
-    removeGroup(groupId) {
-        return Promise.resolve(defaultGroup);
+    async removeGroup(groupId) {
+        return await this.repository.removeGroup(groupId);
     }
 }
