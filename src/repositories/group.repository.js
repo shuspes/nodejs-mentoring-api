@@ -5,7 +5,6 @@ export default class PgGroupRepository {
     async getGroup(id) {
         try {
             const group = await GroupModel.findByPk(id);
-            console.log('getGroup', id, group);
             return group;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -15,8 +14,6 @@ export default class PgGroupRepository {
     async getGroups() {
         try {
             const groups = await GroupModel.findAll({ raw : true });
-            console.log('getGroups', groups);
-
             return groups;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -26,8 +23,6 @@ export default class PgGroupRepository {
     async createGroup(groupFields) {
         try {
             const createdGroup = await GroupModel.create(groupFields);
-            console.log('createGroup', groupFields, createdGroup);
-
             return createdGroup;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -42,7 +37,6 @@ export default class PgGroupRepository {
                 },
                 returning: true
             });
-            console.log('updateGroup', group, result);
 
             return result[1][0].get();
         } catch (err) {
