@@ -8,10 +8,24 @@
 
 ## Database:
 
-* **database/createUsersTable.sql** to create **users** table
-* **database/addInitialDataToUsersTable.sql** to add initial contend to **users** table
-* **database/deleteUsersTableContent.sql** to clean **users** table
-* **database/dropUsersTable.sql** to delete **users** table
+* **database/users.createTable.sql** to create **users** table
+* **database/users.insertInitialData.sql** to add initial contend to **users** table
+* **database/users.deleteTableContent.sql** to clean **users** table
+* **database/users.dropTable.sql** to delete **users** table
+
+---
+
+* **database/groups.createTable.sql** to create **groups** table
+* **database/groups.insertInitialData.sql** to add initial contend to **groups** table
+* **database/groups.deleteTableContent.sql** to clean **groups** table
+* **database/groups.dropTable.sql** to delete **groups** table
+
+---
+
+* **database/userGroup.createTable.sql** to create **user_group** table
+* **database/userGroup.insertInitialData.sql** to add initial contend to **user_group** table
+* **database/userGroup.deleteTableContent.sql** to clean **user_group** table
+* **database/userGroup.dropTable.sql** to delete **user_group** table
 
 ## .env file template:
 PORT=  
