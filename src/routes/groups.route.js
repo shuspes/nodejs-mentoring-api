@@ -3,10 +3,10 @@ import GroupController from '../controllers/group.controller';
 import GroupService from '../services/group.service';
 import GroupRepository from '../repositories/group.repository';
 
-function initGroupsRoute(groupModel) {
+function initGroupsRoute(groupModel, sequelize) {
     const router = express.Router();
 
-    const groupRepository = new GroupRepository(groupModel);
+    const groupRepository = new GroupRepository(groupModel, sequelize);
     const groupService = new GroupService(groupRepository);
     const groupController = new GroupController(groupService);
 

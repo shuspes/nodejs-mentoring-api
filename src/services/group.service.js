@@ -26,4 +26,8 @@ export default class GroupService {
     async removeGroup(groupId) {
         return await this.repository.removeGroup(groupId);
     }
+
+    async addUsersToGroup(groupId, userIds) {
+        return await this.repository.addUsersToGroup(groupId, userIds);
+    }
 }

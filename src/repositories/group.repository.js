@@ -1,7 +1,8 @@
 import CustomError from '../errors/customError';
 
 export default class PgGroupRepository {
-    constructor(groupModel) {
+    constructor(groupModel, sequelize) {
+        this.sequelize = sequelize;
         this.groupModel = groupModel;
     }
 
@@ -62,6 +63,30 @@ export default class PgGroupRepository {
             }
             throw new CustomError(400, `Group with '${id}' id does not exist.`);
         } catch (err) {
+            throw new CustomError(400, err.message);
+        }
+    }
+
+    async addUsersToGroup(groupId, userIds) {
+        const t = await this.sequelize.transaction();
+
+        try {
+            const group = await this.getGroup(groupId);
+            if (!group) {
+                throw new CustomError(400, `Group with '${groupId}' id does not exist.`);
+            }
+
+            for (const userId of userIds) {
+                const result = await group.addUser(userId, { transaction: t });
+                if (!result) {
+                    throw new CustomError(400, `Cannot add User with '${userId}' id to the Group with '${groupId}' id.`);
+                }
+            }
+
+            await t.commit();
+            return `${userIds} User was successfully added to the Group with '${groupId}' id.`;
+        } catch (err) {
+            await t.rollback();
             throw new CustomError(400, err.message);
         }
     }

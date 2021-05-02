@@ -14,7 +14,7 @@ function initGroupModel(sequelize, groupsTableName)  {
             allowNull: false
         },
         permissions: {
-            type: Sequelize.ARRAY(Sequelize.STRING) ,
+            type: Sequelize.ARRAY(Sequelize.STRING),
             allowNull: false
         }
     }, { sequelize, modelName: 'Group', tableName: groupsTableName, timestamps: false });

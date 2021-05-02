@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', initUsersRoute(db.userModel));
-app.use('/groups', initGroupsRoute(db.groupModel));
+app.use('/groups', initGroupsRoute(db.groupModel, db.sequelize));
 
 app.get('/', (req, res) => {
     console.log('root is called');

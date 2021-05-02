@@ -54,9 +54,10 @@ export default class GroupController {
         const groupId = req.params.groupId || '';
         const userIds = req.body;
 
-        console.log('groupId', groupId);
-        console.log('userIds', userIds);
-
-        res.send({ message: 'pepelac' });
+        this.service.addUsersToGroup(groupId, userIds)
+            .then(data => {
+                res.send({ data });
+            })
+            .catch(next);
     }
 }
