@@ -1,10 +1,13 @@
-import GroupModel from '../models/group';
 import CustomError from '../errors/customError';
 
 export default class PgGroupRepository {
+    constructor(groupModel) {
+        this.groupModel = groupModel;
+    }
+
     async getGroup(id) {
         try {
-            const group = await GroupModel.findByPk(id);
+            const group = await this.groupModel.findByPk(id);
             return group;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -13,7 +16,7 @@ export default class PgGroupRepository {
 
     async getGroups() {
         try {
-            const groups = await GroupModel.findAll({ raw : true });
+            const groups = await this.groupModel.findAll({ raw : true });
             return groups;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -22,7 +25,7 @@ export default class PgGroupRepository {
 
     async createGroup(groupFields) {
         try {
-            const createdGroup = await GroupModel.create(groupFields);
+            const createdGroup = await this.groupModel.create(groupFields);
             return createdGroup;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -31,7 +34,7 @@ export default class PgGroupRepository {
 
     async updateGroup(group) {
         try {
-            const result = await GroupModel.update(group, {
+            const result = await this.groupModel.update(group, {
                 where: {
                     id: group.id
                 },
@@ -46,7 +49,7 @@ export default class PgGroupRepository {
 
     async removeGroup(id) {
         try {
-            const result = await GroupModel.destroy({
+            const result = await this.groupModel.destroy({
                 where: {
                     id
                 },

@@ -4,35 +4,39 @@ import UserService from '../services/user.service';
 import UserController from '../controllers/user.controller';
 import CustomError from '../errors/customError';
 
-const router = express.Router();
+function initUsersRoute(userModel) {
+    const router = express.Router();
 
-const userRepository = createUserRepository();
-const userService = new UserService(userRepository);
-const userController = new UserController(userService);
+    const userRepository = createUserRepository(userModel);
+    const userService = new UserService(userRepository);
+    const userController = new UserController(userService);
 
-router.param('userId', userController.handleUserIdParamMiddleware);
+    router.param('userId', userController.handleUserIdParamMiddleware);
 
-router.route('/')
-    .get(userController.getAllUsers)
-    .post(userController.getUserBodyValidator(), userController.createUser);
+    router.route('/')
+        .get(userController.getAllUsers)
+        .post(userController.getUserBodyValidator(), userController.createUser);
 
-router.route('/:userId')
-    .get(userController.getUser)
-    .put(userController.getUserBodyValidator(), userController.updateUser)
-    .delete(userController.removeUser);
+    router.route('/:userId')
+        .get(userController.getUser)
+        .put(userController.getUserBodyValidator(), userController.updateUser)
+        .delete(userController.removeUser);
 
-router.get('/:loginSubstring/:limit', userController.getAutoSuggestUsers);
+    router.get('/:loginSubstring/:limit', userController.getAutoSuggestUsers);
 
-router.use(userController.handleUserBodyValidationMiddleware);
+    router.use(userController.handleUserBodyValidationMiddleware);
 
-router.use((err, req, res, next) => {
-    console.error('users router layer ERROR: ', err);
+    router.use((err, req, res, next) => {
+        console.error('users router layer ERROR: ', err);
 
-    if (CustomError.isCustomError(err)) {
-        res.status(err.code).send({ 'error': err.message });
-    } else {
-        return next(err);
-    }
-});
+        if (CustomError.isCustomError(err)) {
+            res.status(err.code).send({ 'error': err.message });
+        } else {
+            return next(err);
+        }
+    });
 
-export default router;
+    return router;
+}
+
+export default initUsersRoute;

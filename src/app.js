@@ -1,6 +1,7 @@
 import express from 'express';
-import users from './routes/users.route';
-import groups from './routes/groups.route';
+import db from './models';
+import initUsersRoute from './routes/users.route';
+import initGroupsRoute from './routes/groups.route';
 import config from './config';
 
 const PORT = config.port;
@@ -13,8 +14,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/users', users);
-app.use('/groups', groups);
+app.use('/users', initUsersRoute(db.userModel));
+app.use('/groups', initGroupsRoute(db.groupModel));
 
 app.get('/', (req, res) => {
     console.log('root is called');

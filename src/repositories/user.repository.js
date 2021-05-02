@@ -1,11 +1,14 @@
 import { Op } from 'sequelize';
 import CustomError from '../errors/customError';
-import UserModel from '../models/user';
 
 export default class PgUserRepository {
+    constructor(userModel) {
+        this.userModel = userModel;
+    }
+
     async getUsers() {
         try {
-            const users = await UserModel.findAll({ raw : true });
+            const users = await this.userModel.findAll({ raw : true });
             return users;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -14,7 +17,7 @@ export default class PgUserRepository {
 
     async getUser(id) {
         try {
-            const user = await UserModel.findByPk(id);
+            const user = await this.userModel.findByPk(id);
             return user;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -23,7 +26,7 @@ export default class PgUserRepository {
 
     async createUser(user) {
         try {
-            const createdUser = await UserModel.create(user);
+            const createdUser = await this.userModel.create(user);
             return createdUser;
         } catch (err) {
             throw new CustomError(400, err.message);
@@ -32,7 +35,7 @@ export default class PgUserRepository {
 
     async updateUser(user) {
         try {
-            const result = await UserModel.update(user, {
+            const result = await this.userModel.update(user, {
                 where: {
                     id: user.id
                 },
@@ -46,7 +49,7 @@ export default class PgUserRepository {
 
     async getAutoSuggestUsers(loginSubstring, limit) {
         try {
-            const users = await UserModel.findAll({
+            const users = await this.userModel.findAll({
                 limit,
                 where: {
                     isDeleted: false,
