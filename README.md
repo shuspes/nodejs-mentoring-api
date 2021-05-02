@@ -79,3 +79,5 @@ DATABASE_GROUPS_TABLE_NAME=
 * **PUT** update group - curl -i -X PUT -H "Content-Type: application/json" -d "{\"permissions\": [\"UPLOAD_FILES\"]}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130001 | npx json
 
 * **DELETE** remove group - curl -i -X DELETE http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130004 | npx json
+
+* **POST** add users to group - curl -i -X POST -H "Content-Type: application/json" -d "{\"userIds\": [\"ac34d1e0-8ffe-11eb-a8b3-0242ac130004\", \"ac34d83e-8ffe-11eb-a8b3-0242ac130002\"]}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130003/users | npx json

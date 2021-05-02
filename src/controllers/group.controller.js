@@ -49,4 +49,14 @@ export default class GroupController {
             })
             .catch(next);
     }
+
+    addUsersToGroup = (req, res, next) => {
+        const groupId = req.params.groupId || '';
+        const userIds = req.body;
+
+        console.log('groupId', groupId);
+        console.log('userIds', userIds);
+
+        res.send({ message: 'pepelac' });
+    }
 }

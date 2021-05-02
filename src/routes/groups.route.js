@@ -18,4 +18,7 @@ router.route('/:groupId')
     .put(groupController.updateGroup)
     .delete(groupController.removeGroup);
 
+router.route('/:groupId/users')
+    .post(groupController.addUsersToGroup);
+
 export default router;
