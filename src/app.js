@@ -3,6 +3,7 @@ import db from './models';
 import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
 import config from './config';
+import CustomLogger from './loggers/customLogger';
 
 const PORT = config.port;
 const app = express();
@@ -10,7 +11,10 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(`'${req.method}' request was called on '${req.url}' url at '${(new Date()).toISOString()}'`);
+    const logger = new CustomLogger();
+    logger.addToMessage(`'${req.method}' HTTP method was called on '${req.url}' url`);
+    logger.addToMessage(`Request body: ${JSON.stringify(req.body)}`);
+    logger.logToConsole();
     next();
 });
 
