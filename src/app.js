@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
     const logger = new CustomLogger('app:root-http');
-    logger.addToMessage(`'${req.method}' HTTP method was called on '${req.url}' url ${req.originalUrl}`);
+    logger.addToMessage(`'${req.method}' HTTP method was called on '${req.url}' url`);
     isNotEmptyObject(req.body) && logger.addToMessage(`Request body: ${JSON.stringify(req.body)}`);
     isNotEmptyObject(req.query) && logger.addToMessage(`Request query: ${JSON.stringify(req.query)}`);
     logger.logToConsole();
@@ -42,4 +42,16 @@ app.listen(PORT,  error => {
         return console.error('ERROR: ', error);
     }
     console.log(`Application is listening port ${PORT}.`);
+});
+
+process.on('unhandledRejection', err => {
+    const logger = new CustomLogger('app:unhandled-Rejection');
+    logger.addToMessage(`Error: ${err}`);
+    logger.logToConsole();
+});
+
+process.on('uncaughtException', err => {
+    const logger = new CustomLogger('app:uncaught-Exception');
+    logger.addToMessage(`Error: ${err}`);
+    logger.logToConsole();
 });
