@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    const logger = new CustomLogger();
+    const logger = new CustomLogger('app:root-http');
     logger.addToMessage(`'${req.method}' HTTP method was called on '${req.url}' url ${req.originalUrl}`);
     isNotEmptyObject(req.body) && logger.addToMessage(`Request body: ${JSON.stringify(req.body)}`);
     isNotEmptyObject(req.query) && logger.addToMessage(`Request query: ${JSON.stringify(req.query)}`);
