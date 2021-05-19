@@ -13,17 +13,21 @@ export default class UserController {
         'age': Joi.number().min(4).max(130).required() // user’s age must be between 4 and 130.
     });
 
+    #errorLogger = (next, methodName, methodArguments) => (err) => {
+        const logger = new CustomLogger('app:user.controller-ERROR');
+        logger.addToMessage(`Controller method: ${methodName}`);
+        methodArguments && logger.addToMessage(`Controller method arguments: ${JSON.stringify(methodArguments)}`);
+        logger.addToMessage(`Error: ${err.message}`);
+        logger.logToConsole();
+
+        next(err);
+    }
+
     constructor(service) {
         this.service = service;
     }
 
     getAllUsers = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('getAllUsers');
-        logger.logToConsole();
-        // ---->
-
         if (isNotEmptyObject(req.query)) {
             return next();
         }
@@ -32,46 +36,28 @@ export default class UserController {
             .then(users => {
                 res.send({ users });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getAllUsers'));
     }
 
     getUser = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('getUser');
-        logger.logToConsole();
-        // ---->
-
         const userId = req.params.userId || '';
         this.service.getUser(userId)
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getUser', { userId }));
     }
 
     createUser = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('createUser');
-        logger.logToConsole();
-        // ---->
-
         const userFields = req.body;
         this.service.createUser(userFields)
             .then(user => {
                 res.status(201).send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'createUser', req.body));
     }
 
     updateUser = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('updateUser');
-        logger.logToConsole();
-        // ---->
-
         const newUserFields = req.body;
         const existedUser = req.existedUser;
 
@@ -79,16 +65,10 @@ export default class UserController {
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'updateUser', { newUserFields, existedUser }));
     }
 
     getAutoSuggestUsers = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('getAutoSuggestUsers');
-        logger.logToConsole();
-        // ---->
-
         const {
             loginSubstring,
             limit
@@ -98,22 +78,16 @@ export default class UserController {
             .then(users => {
                 res.send({ users });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getAutoSuggestUsers', req.query));
     }
 
     removeUser = (req, res, next) => {
-        // ---->
-        const logger = new CustomLogger();
-        logger.addToMessage('removeUser');
-        logger.logToConsole();
-        // ---->
-
         const userId = req.params.userId || '';
         this.service.removeUser(userId)
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'removeUser', { userId }));
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
@@ -126,7 +100,7 @@ export default class UserController {
                 req.existedUser = existedUser;
                 next();
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'handleUserIdParamMiddleware', { userId }));
     }
 
     getUserBodyValidator = () => {
