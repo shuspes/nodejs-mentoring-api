@@ -56,7 +56,7 @@ DATABASE_GROUPS_TABLE_NAME=
 
 * **PUT** update user - curl -i -X PUT -H "Content-Type: application/json" -d "{\"login\": \"user-2-updated\", \"password\": \"U$er@1\", \"age\": 56}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
 
-* **GET** get auto suggest users - curl -i http://localhost:3000/users/use/10 | npx json
+* **GET** get auto suggest users - curl -i "http://localhost:3000/users?loginSubstring=use&limit=2" | npx json
 
 * **DELETE** remove user - curl -i -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
 

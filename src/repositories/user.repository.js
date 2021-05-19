@@ -50,12 +50,14 @@ export default class PgUserRepository {
     async getAutoSuggestUsers(loginSubstring, limit) {
         try {
             const users = await this.userModel.findAll({
-                limit,
+                ...(limit && { limit }),
                 where: {
                     isDeleted: false,
-                    login: {
-                        [Op.like]: `%${ loginSubstring }%`
-                    }
+                    ...(loginSubstring && {
+                        login: {
+                            [Op.like]: `%${ loginSubstring }%`
+                        }
+                    })
                 },
                 order: [
                     ['login', 'ASC']

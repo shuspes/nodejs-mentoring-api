@@ -1,6 +1,8 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
 import CustomError from '../errors/customError';
+import { isNotEmptyObject } from '../utils';
+import CustomLogger from '../loggers/customLogger';
 
 export default class UserController {
     #validator = createValidator({ passError: true });
@@ -16,6 +18,16 @@ export default class UserController {
     }
 
     getAllUsers = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('getAllUsers');
+        logger.logToConsole();
+        // ---->
+
+        if (isNotEmptyObject(req.query)) {
+            return next();
+        }
+
         this.service.getAllUsers()
             .then(users => {
                 res.send({ users });
@@ -24,6 +36,12 @@ export default class UserController {
     }
 
     getUser = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('getUser');
+        logger.logToConsole();
+        // ---->
+
         const userId = req.params.userId || '';
         this.service.getUser(userId)
             .then(user => {
@@ -33,6 +51,12 @@ export default class UserController {
     }
 
     createUser = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('createUser');
+        logger.logToConsole();
+        // ---->
+
         const userFields = req.body;
         this.service.createUser(userFields)
             .then(user => {
@@ -42,6 +66,12 @@ export default class UserController {
     }
 
     updateUser = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('updateUser');
+        logger.logToConsole();
+        // ---->
+
         const newUserFields = req.body;
         const existedUser = req.existedUser;
 
@@ -53,10 +83,16 @@ export default class UserController {
     }
 
     getAutoSuggestUsers = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('getAutoSuggestUsers');
+        logger.logToConsole();
+        // ---->
+
         const {
-            loginSubstring = '',
-            limit = 0
-        } = req.params;
+            loginSubstring,
+            limit
+        } = req.query;
 
         this.service.getAutoSuggestUsers(loginSubstring, limit)
             .then(users => {
@@ -66,6 +102,12 @@ export default class UserController {
     }
 
     removeUser = (req, res, next) => {
+        // ---->
+        const logger = new CustomLogger();
+        logger.addToMessage('removeUser');
+        logger.logToConsole();
+        // ---->
+
         const userId = req.params.userId || '';
         this.service.removeUser(userId)
             .then(user => {
