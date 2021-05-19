@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import CustomError from '../errors/customError';
+import CustomError from '../utils/errors/customError';
 
 export default class PgUserRepository {
     constructor(userModel) {

@@ -3,8 +3,8 @@ import db from './models';
 import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
 import config from './config';
-import CustomLogger from './loggers/customLogger';
-import { isNotEmptyObject } from './utils';
+import CustomLogger from './utils/loggers/customLogger';
+import { isNotEmptyObject } from './utils/utils';
 
 const PORT = config.port;
 const app = express();

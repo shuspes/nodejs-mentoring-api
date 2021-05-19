@@ -2,7 +2,7 @@ import express from 'express';
 import { createUserRepository } from '../repositories';
 import UserService from '../services/user.service';
 import UserController from '../controllers/user.controller';
-import CustomError from '../errors/customError';
+import CustomError from '../utils/errors/customError';
 
 function initUsersRoute(userModel) {
     const router = express.Router();

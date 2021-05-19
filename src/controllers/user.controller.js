@@ -1,8 +1,8 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
-import CustomError from '../errors/customError';
-import { isNotEmptyObject } from '../utils';
-import CustomLogger from '../loggers/customLogger';
+import CustomError from '../utils/errors/customError';
+import { isNotEmptyObject } from '../utils/utils';
+import CustomLogger from '../utils/loggers/customLogger';
 
 export default class UserController {
     #validator = createValidator({ passError: true });
