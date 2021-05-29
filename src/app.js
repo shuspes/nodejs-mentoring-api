@@ -3,6 +3,8 @@ import db from './models';
 import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
 import config from './config';
+import CustomLogger from './utils/loggers/customLogger';
+import { isNotEmptyObject } from './utils/utils';
 
 const PORT = config.port;
 const app = express();
@@ -10,7 +12,12 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(`'${req.method}' request was called on '${req.url}' url at '${(new Date()).toISOString()}'`);
+    const logger = new CustomLogger('app:root-http');
+    logger.addToMessage(`'${req.method}' HTTP method was called on '${req.url}' url`);
+    isNotEmptyObject(req.body) && logger.addToMessage(`Request body: ${JSON.stringify(req.body)}`);
+    isNotEmptyObject(req.query) && logger.addToMessage(`Request query: ${JSON.stringify(req.query)}`);
+    logger.logToConsole();
+
     next();
 });
 
@@ -35,4 +42,16 @@ app.listen(PORT,  error => {
         return console.error('ERROR: ', error);
     }
     console.log(`Application is listening port ${PORT}.`);
+});
+
+process.on('unhandledRejection', err => {
+    const logger = new CustomLogger('app:unhandled-Rejection');
+    logger.addToMessage(`Error: ${err}`);
+    logger.logToConsole();
+});
+
+process.on('uncaughtException', err => {
+    const logger = new CustomLogger('app:uncaught-Exception');
+    logger.addToMessage(`Error: ${err}`);
+    logger.logToConsole();
 });

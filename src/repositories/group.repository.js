@@ -1,4 +1,4 @@
-import CustomError from '../errors/customError';
+import CustomError from '../utils/errors/customError';
 
 export default class PgGroupRepository {
     constructor(groupModel, sequelize) {

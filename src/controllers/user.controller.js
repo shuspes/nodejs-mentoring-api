@@ -1,6 +1,8 @@
 import Joi from 'joi';
 import { createValidator } from 'express-joi-validation';
-import CustomError from '../errors/customError';
+import CustomError from '../utils/errors/customError';
+import { isNotEmptyObject } from '../utils/utils';
+import CustomLogger from '../utils/loggers/customLogger';
 
 export default class UserController {
     #validator = createValidator({ passError: true });
@@ -11,16 +13,30 @@ export default class UserController {
         'age': Joi.number().min(4).max(130).required() // user’s age must be between 4 and 130.
     });
 
+    #errorLogger = (next, methodName, methodArguments) => (err) => {
+        const logger = new CustomLogger('app:user.controller-ERROR');
+        logger.addToMessage(`Controller method: ${methodName}`);
+        methodArguments && logger.addToMessage(`Controller method arguments: ${JSON.stringify(methodArguments)}`);
+        logger.addToMessage(`Error: ${err.message}`);
+        logger.logToConsole();
+
+        next(err);
+    }
+
     constructor(service) {
         this.service = service;
     }
 
     getAllUsers = (req, res, next) => {
+        if (isNotEmptyObject(req.query)) {
+            return next();
+        }
+
         this.service.getAllUsers()
             .then(users => {
                 res.send({ users });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getAllUsers'));
     }
 
     getUser = (req, res, next) => {
@@ -29,7 +45,7 @@ export default class UserController {
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getUser', { userId }));
     }
 
     createUser = (req, res, next) => {
@@ -38,7 +54,7 @@ export default class UserController {
             .then(user => {
                 res.status(201).send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'createUser', req.body));
     }
 
     updateUser = (req, res, next) => {
@@ -49,20 +65,20 @@ export default class UserController {
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'updateUser', { newUserFields, existedUser }));
     }
 
     getAutoSuggestUsers = (req, res, next) => {
         const {
-            loginSubstring = '',
-            limit = 0
-        } = req.params;
+            loginSubstring,
+            limit
+        } = req.query;
 
         this.service.getAutoSuggestUsers(loginSubstring, limit)
             .then(users => {
                 res.send({ users });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'getAutoSuggestUsers', req.query));
     }
 
     removeUser = (req, res, next) => {
@@ -71,7 +87,7 @@ export default class UserController {
             .then(user => {
                 res.send({ user });
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'removeUser', { userId }));
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
@@ -84,7 +100,7 @@ export default class UserController {
                 req.existedUser = existedUser;
                 next();
             })
-            .catch(next);
+            .catch(this.#errorLogger(next, 'handleUserIdParamMiddleware', { userId }));
     }
 
     getUserBodyValidator = () => {

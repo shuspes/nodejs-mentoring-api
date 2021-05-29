@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import CustomError from '../errors/customError';
+import CustomError from '../utils/errors/customError';
 
 export default class PgUserRepository {
     constructor(userModel) {
@@ -50,12 +50,14 @@ export default class PgUserRepository {
     async getAutoSuggestUsers(loginSubstring, limit) {
         try {
             const users = await this.userModel.findAll({
-                limit,
+                ...(limit && { limit }),
                 where: {
                     isDeleted: false,
-                    login: {
-                        [Op.like]: `%${ loginSubstring }%`
-                    }
+                    ...(loginSubstring && {
+                        login: {
+                            [Op.like]: `%${ loginSubstring }%`
+                        }
+                    })
                 },
                 order: [
                     ['login', 'ASC']
