@@ -1,15 +1,19 @@
 import express from 'express';
 import db from './models';
 import { createUserRepository } from './repositories';
+import GroupRepository from './repositories/group.repository';
 import UserService from './services/user.service';
+import GroupService from './services/group.service';
+import AuthorizationService from './services/authorization.service';
 import UserController from './controllers/user.controller';
 import GroupController from './controllers/group.controller';
-import GroupService from './services/group.service';
-import GroupRepository from './repositories/group.repository';
+import AuthorizationController from './controllers/authorization.controller';
 import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
+import initAuthorizationRoute from './routes/authorization.route';
 import config from './config';
 import CustomLogger from './utils/loggers/customLogger';
+import CustomError from './utils/errors/customError';
 import { isNotEmptyObject } from './utils/utils';
 
 const PORT = config.port;
@@ -37,6 +41,10 @@ const groupService = new GroupService(groupRepository);
 const groupController = new GroupController(groupService);
 app.use('/groups', initGroupsRoute(groupController));
 
+const authorizationService = new AuthorizationService(userService);
+const authorizationController = new AuthorizationController(authorizationService);
+app.use('/auth', initAuthorizationRoute(authorizationController));
+
 app.get('/', (req, res) => {
     console.log('root is called');
     res.send('Hi from root');
@@ -44,10 +52,16 @@ app.get('/', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.error('app layer ERROR: ', err);
+
     if (res.headersSent) {
         return next(err);
     }
-    res.status(500).send({ 'error': err.message || err });
+
+    if (CustomError.isCustomError(err)) {
+        res.status(err.code).send({ 'error': err.message });
+    } else {
+        res.status(500).send({ 'error': err.message || err });
+    }
 });
 
 app.listen(PORT,  error => {

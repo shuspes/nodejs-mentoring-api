@@ -81,3 +81,14 @@ DATABASE_GROUPS_TABLE_NAME=
 * **DELETE** remove group - curl -i -X DELETE http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130004 | npx json
 
 * **POST** add users to group - curl -i -X POST -H "Content-Type: application/json" -d "[\"ac34d1e0-8ffe-11eb-a8b3-0242ac130004\", \"ac34d83e-8ffe-11eb-a8b3-0242ac130002\"]" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130003/users | npx json
+
+### Auth route:
+
+#### Methods:
+
+* **GET** login method to get JWT token:
+  * **Existed** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-4\", \"password\": \"u$er!\"}" http://localhost:3000/auth/login | npx json
+
+  * **Deleted** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-3\", \"password\": \"u$er#\"}" http://localhost:3000/auth/login | npx json
+
+  * **Not Existed** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-44\", \"password\": \"u$er!\"}" http://localhost:3000/auth/login | npx json
