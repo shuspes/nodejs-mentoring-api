@@ -70,6 +70,15 @@ export default class PgUserRepository {
         }
     }
 
+    async getUserByLogin(login) {
+        try {
+            const user = await this.userModel.findOne({ where: { isDeleted: false, login } });
+            return user;
+        } catch (err) {
+            throw new CustomError(400, err.message);
+        }
+    }
+
     async removeUser(id) {
         try {
             const user = await this.getUser(id);
