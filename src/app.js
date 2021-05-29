@@ -1,5 +1,11 @@
 import express from 'express';
 import db from './models';
+import { createUserRepository } from './repositories';
+import UserService from './services/user.service';
+import UserController from './controllers/user.controller';
+import GroupController from './controllers/group.controller';
+import GroupService from './services/group.service';
+import GroupRepository from './repositories/group.repository';
 import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
 import config from './config';
@@ -21,8 +27,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/users', initUsersRoute(db.userModel));
-app.use('/groups', initGroupsRoute(db.groupModel, db.sequelize));
+const userRepository = createUserRepository(db.userModel);
+const userService = new UserService(userRepository);
+const userController = new UserController(userService);
+app.use('/users', initUsersRoute(userController));
+
+const groupRepository = new GroupRepository(db.groupModel, db.sequelize);
+const groupService = new GroupService(groupRepository);
+const groupController = new GroupController(groupService);
+app.use('/groups', initGroupsRoute(groupController));
 
 app.get('/', (req, res) => {
     console.log('root is called');

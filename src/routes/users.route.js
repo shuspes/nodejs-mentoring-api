@@ -1,15 +1,8 @@
 import express from 'express';
-import { createUserRepository } from '../repositories';
-import UserService from '../services/user.service';
-import UserController from '../controllers/user.controller';
 import CustomError from '../utils/errors/customError';
 
-function initUsersRoute(userModel) {
+function initUsersRoute(userController) {
     const router = express.Router();
-
-    const userRepository = createUserRepository(userModel);
-    const userService = new UserService(userRepository);
-    const userController = new UserController(userService);
 
     router.param('userId', userController.handleUserIdParamMiddleware);
 
