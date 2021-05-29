@@ -13,5 +13,6 @@ export default {
         password: process.env.DATABASE_PASSWORD || '',
         usersTableName: process.env.DATABASE_USERS_TABLE_NAME || 'users',
         groupsTableName: process.env.DATABASE_GROUPS_TABLE_NAME || 'groups'
-    }
+    },
+    jwtSecretKey: process.env.JWT_SECRET_KEY || 'shhhhh'
 };
