@@ -1,7 +1,9 @@
 import express from 'express';
 
-function initGroupsRoute(groupController) {
+function initGroupsRoute(groupController, jwtAuthorizer) {
     const router = express.Router();
+
+    router.use(jwtAuthorizer.authMiddleware);
 
     router.route('/')
         .get(groupController.getAllGroups)

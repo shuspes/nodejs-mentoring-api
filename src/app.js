@@ -12,6 +12,7 @@ import initUsersRoute from './routes/users.route';
 import initGroupsRoute from './routes/groups.route';
 import initAuthorizationRoute from './routes/authorization.route';
 import config from './config';
+import JwtAuthorizer from './utils/authorizers/jwtAuthorizer';
 import CustomLogger from './utils/loggers/customLogger';
 import CustomError from './utils/errors/customError';
 import { isNotEmptyObject } from './utils/utils';
@@ -31,17 +32,19 @@ app.use((req, res, next) => {
     next();
 });
 
+const jwtAuthorizer = new JwtAuthorizer(config.jwtSecretKey);
+
 const userRepository = createUserRepository(db.userModel);
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
-app.use('/users', initUsersRoute(userController));
+app.use('/users', initUsersRoute(userController, jwtAuthorizer));
 
 const groupRepository = new GroupRepository(db.groupModel, db.sequelize);
 const groupService = new GroupService(groupRepository);
 const groupController = new GroupController(groupService);
-app.use('/groups', initGroupsRoute(groupController));
+app.use('/groups', initGroupsRoute(groupController, jwtAuthorizer));
 
-const authorizationService = new AuthorizationService(userService);
+const authorizationService = new AuthorizationService(userService, jwtAuthorizer);
 const authorizationController = new AuthorizationController(authorizationService);
 app.use('/auth', initAuthorizationRoute(authorizationController));
 

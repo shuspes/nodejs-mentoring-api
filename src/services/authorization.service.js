@@ -1,9 +1,9 @@
 import CustomError from '../utils/errors/customError';
-import JwtAuthorizer from '../utils/authorizers/jwtAuthorizer';
 
 export default class AuthorizationService {
-    constructor(userService) {
+    constructor(userService, jwtAuthorizer) {
         this.userService = userService;
+        this.jwtAuthorizer = jwtAuthorizer;
     }
 
     async login(username, password) {
@@ -17,7 +17,7 @@ export default class AuthorizationService {
             throw new CustomError(400, 'Username or password is incorrect.');
         }
 
-        const jwtToken = JwtAuthorizer.getToken({ id: user.id, login: user.login, age: user.age });
+        const jwtToken = this.jwtAuthorizer.getToken({ id: user.id, login: user.login, age: user.age });
 
         return jwtToken;
     }

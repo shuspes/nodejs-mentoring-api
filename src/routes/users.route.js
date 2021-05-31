@@ -1,8 +1,10 @@
 import express from 'express';
 import CustomError from '../utils/errors/customError';
 
-function initUsersRoute(userController) {
+function initUsersRoute(userController, jwtAuthorizer) {
     const router = express.Router();
+
+    router.use(jwtAuthorizer.authMiddleware);
 
     router.param('userId', userController.handleUserIdParamMiddleware);
 
