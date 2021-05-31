@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import db from './models';
 import { createUserRepository } from './repositories';
 import GroupRepository from './repositories/group.repository';
@@ -20,6 +21,7 @@ import { isNotEmptyObject } from './utils/utils';
 const PORT = config.port;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {
