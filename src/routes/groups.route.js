@@ -1,14 +1,9 @@
 import express from 'express';
-import GroupController from '../controllers/group.controller';
-import GroupService from '../services/group.service';
-import GroupRepository from '../repositories/group.repository';
 
-function initGroupsRoute(groupModel, sequelize) {
+function initGroupsRoute(groupController, jwtAuthorizer) {
     const router = express.Router();
 
-    const groupRepository = new GroupRepository(groupModel, sequelize);
-    const groupService = new GroupService(groupRepository);
-    const groupController = new GroupController(groupService);
+    router.use(jwtAuthorizer.authMiddleware);
 
     router.route('/')
         .get(groupController.getAllGroups)

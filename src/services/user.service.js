@@ -28,6 +28,10 @@ export default class UserService {
         return await this.repository.getAutoSuggestUsers(loginSubstring, limit);
     }
 
+    async getUserByLogin(login) {
+        return await this.repository.getUserByLogin(login);
+    }
+
     async removeUser(userId) {
         return await this.repository.removeUser(userId);
     }

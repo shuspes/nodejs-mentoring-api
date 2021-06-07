@@ -37,6 +37,7 @@ DATABASE_USER=
 DATABASE_PASSWORD=  
 DATABASE_USERS_TABLE_NAME=  
 DATABASE_GROUPS_TABLE_NAME=  
+JWT_SECRET_KEY=  
 
 ## CURL API calls examples:
 
@@ -48,36 +49,47 @@ DATABASE_GROUPS_TABLE_NAME=
 
 #### Methods:
 
-* **GET** get all users - curl -i http://localhost:3000/users | npx json
+* **GET** get all users - curl -i http://localhost:3000/users -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **GET** get user by id - curl -i http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **GET** get user by id - curl -i http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **POST** create user - curl -i -X POST -H "Content-Type: application/json" -d "{\"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 56}" http://localhost:3000/users | npx json
+* **POST** create user - curl -i -X POST -H "Content-Type: application/json" -d "{\"login\": \"user-5-new\", \"password\": \"P@ssw0rd\", \"age\": 56}" http://localhost:3000/users -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **PUT** update user - curl -i -X PUT -H "Content-Type: application/json" -d "{\"login\": \"user-2-updated\", \"password\": \"U$er@1\", \"age\": 56}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
+* **PUT** update user - curl -i -X PUT -H "Content-Type: application/json" -d "{\"login\": \"user-2-updated\", \"password\": \"U$er@1\", \"age\": 56}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **GET** get auto suggest users - curl -i "http://localhost:3000/users?loginSubstring=use&limit=2" | npx json
+* **GET** get auto suggest users - curl -i "http://localhost:3000/users?loginSubstring=use&limit=2" -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **DELETE** remove user - curl -i -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 | npx json
+* **DELETE** remove user - curl -i -X DELETE http://localhost:3000/users/ac34d1e0-8ffe-11eb-a8b3-0242ac130001 -H "Authorization: Bearer {JWT-Token}" | npx json
 
 #### Testing of unexpected usage:
 
-* **POST** create user with extra argument and boolean login - curl -i -X POST -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": true, \"password\": \"P@ssw0rd\", \"age\": 67}" http://localhost:3000/users | npx json
+* **POST** create user with extra argument and boolean login - curl -i -X POST -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": true, \"password\": \"P@ssw0rd\", \"age\": 67}" http://localhost:3000/users -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **PUT** update user with extra argument, without age and not valid password - curl -i -X PUT -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-2-updated\", \"password\": \"u$eR@\"}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 | npx json
+* **PUT** update user with extra argument, without age and not valid password - curl -i -X PUT -H "Content-Type: application/json" -d "{\"test-param\": \"some test param\", \"login\": \"user-2-updated\", \"password\": \"u$eR@\"}" http://localhost:3000/users/ac34d83e-8ffe-11eb-a8b3-0242ac130002 -H "Authorization: Bearer {JWT-Token}" | npx json
 
 ### Groups route:
 
 #### Methods:
 
-* **GET** get all groups - curl -i http://localhost:3000/groups | npx json
+* **GET** get all groups - curl -i http://localhost:3000/groups -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **GET** get group by id - curl -i http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130002 | npx json
+* **GET** get group by id - curl -i http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130002 -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **POST** create group - curl -i -X POST -H "Content-Type: application/json" -d "{\"name\": \"group-5-new\", \"permissions\": [\"READ\", \"SHARE\", \"UPLOAD_FILES\"]}" http://localhost:3000/groups | npx json
+* **POST** create group - curl -i -X POST -H "Content-Type: application/json" -d "{\"name\": \"group-5-new\", \"permissions\": [\"READ\", \"SHARE\", \"UPLOAD_FILES\"]}" http://localhost:3000/groups -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **PUT** update group - curl -i -X PUT -H "Content-Type: application/json" -d "{\"permissions\": [\"UPLOAD_FILES\"]}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130001 | npx json
+* **PUT** update group - curl -i -X PUT -H "Content-Type: application/json" -d "{\"permissions\": [\"UPLOAD_FILES\"]}" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130001 -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **DELETE** remove group - curl -i -X DELETE http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130004 | npx json
+* **DELETE** remove group - curl -i -X DELETE http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130004 -H "Authorization: Bearer {JWT-Token}" | npx json
 
-* **POST** add users to group - curl -i -X POST -H "Content-Type: application/json" -d "[\"ac34d1e0-8ffe-11eb-a8b3-0242ac130004\", \"ac34d83e-8ffe-11eb-a8b3-0242ac130002\"]" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130003/users | npx json
+* **POST** add users to group - curl -i -X POST -H "Content-Type: application/json" -d "[\"ac34d1e0-8ffe-11eb-a8b3-0242ac130004\", \"ac34d83e-8ffe-11eb-a8b3-0242ac130002\"]" http://localhost:3000/groups/d29e2030-a9e3-11eb-bcbc-0242ac130003/users -H "Authorization: Bearer {JWT-Token}" | npx json
+
+### Auth route:
+
+#### Methods:
+
+* **GET** login method to get JWT token:
+  * **Existed User** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-4\", \"password\": \"u$er!\"}" http://localhost:3000/auth/login | npx json
+
+  * **Deleted User** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-3\", \"password\": \"u$er#\"}" http://localhost:3000/auth/login | npx json
+
+  * **Not Existed User** - curl -i -X POST -H "Content-Type: application/json" -d "{\"username\": \"user-44\", \"password\": \"u$er!\"}" http://localhost:3000/auth/login | npx json
