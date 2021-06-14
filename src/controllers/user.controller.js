@@ -32,7 +32,7 @@ export default class UserController {
             return next();
         }
 
-        this.service.getAllUsers()
+        return this.service.getAllUsers()
             .then(users => {
                 res.send({ users });
             })
@@ -41,7 +41,7 @@ export default class UserController {
 
     getUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        this.service.getUser(userId)
+        return this.service.getUser(userId)
             .then(user => {
                 res.send({ user });
             })
@@ -50,7 +50,7 @@ export default class UserController {
 
     createUser = (req, res, next) => {
         const userFields = req.body;
-        this.service.createUser(userFields)
+        return this.service.createUser(userFields)
             .then(user => {
                 res.status(201).send({ user });
             })
@@ -61,7 +61,7 @@ export default class UserController {
         const newUserFields = req.body;
         const existedUser = req.existedUser;
 
-        this.service.updateUser(newUserFields, existedUser)
+        return this.service.updateUser(newUserFields, existedUser)
             .then(user => {
                 res.send({ user });
             })
@@ -74,7 +74,7 @@ export default class UserController {
             limit
         } = req.query;
 
-        this.service.getAutoSuggestUsers(loginSubstring, limit)
+        return this.service.getAutoSuggestUsers(loginSubstring, limit)
             .then(users => {
                 res.send({ users });
             })
@@ -83,7 +83,7 @@ export default class UserController {
 
     removeUser = (req, res, next) => {
         const userId = req.params.userId || '';
-        this.service.removeUser(userId)
+        return this.service.removeUser(userId)
             .then(user => {
                 res.send({ user });
             })
@@ -91,7 +91,7 @@ export default class UserController {
     }
 
     handleUserIdParamMiddleware = (req, res, next, userId) => {
-        this.service.getUser(userId)
+        return this.service.getUser(userId)
             .then(existedUser => {
                 if (!existedUser) {
                     return Promise.reject(new CustomError(400, `User with '${userId}' id does not exist.`));

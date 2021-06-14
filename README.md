@@ -6,6 +6,8 @@
 
 * **npm run eslint** to run eslint audit
 
+* **npm run test** to run Jest tests
+
 ## Database:
 
 * **database/users.createTable.sql** to create **users** table
