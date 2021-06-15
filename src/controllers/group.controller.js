@@ -18,7 +18,7 @@ export default class GroupController {
     getGroup = (req, res, next) => {
         const groupId = req.params.groupId || '';
 
-        this.service.getGroup(groupId)
+        return this.service.getGroup(groupId)
             .then(group => {
                 res.send({ group });
             })
@@ -26,7 +26,7 @@ export default class GroupController {
     }
 
     getAllGroups = (req, res, next) => {
-        this.service.getAllGroups()
+        return this.service.getAllGroups()
             .then(groups => {
                 res.send({ groups });
             })
@@ -35,7 +35,7 @@ export default class GroupController {
 
     createGroup = (req, res, next) => {
         const groupFields = req.body;
-        this.service.createGroup(groupFields)
+        return this.service.createGroup(groupFields)
             .then(group => {
                 res.status(201).send({ group });
             })
@@ -46,7 +46,7 @@ export default class GroupController {
         const groupId = req.params.groupId || '';
         const newGroupFields = req.body;
 
-        this.service.updateGroup(groupId, newGroupFields)
+        return this.service.updateGroup(groupId, newGroupFields)
             .then(group => {
                 res.send({ group });
             })
@@ -55,7 +55,7 @@ export default class GroupController {
 
     removeGroup = (req, res, next) => {
         const groupId = req.params.groupId || '';
-        this.service.removeGroup(groupId)
+        return this.service.removeGroup(groupId)
             .then(id => {
                 res.send({ deletedGroup: id });
             })
@@ -66,7 +66,7 @@ export default class GroupController {
         const groupId = req.params.groupId || '';
         const userIds = req.body;
 
-        this.service.addUsersToGroup(groupId, userIds)
+        return this.service.addUsersToGroup(groupId, userIds)
             .then(data => {
                 res.send({ data });
             })
